@@ -30,6 +30,46 @@
         ItemsSource="{Binding ServiceList}"
           CanUserAddRows="false"
           AutoGenerateColumns="False">
+            
+            <DataGrid.Columns>
+                <!-- колонкам я задаю фиксированную ширину, чтобы они не ёрзали при прокрутке -->
+                <DataGridTextColumn
+            Width="250"
+            Header="Наименование услуги"
+            Binding="{Binding Title}"/>
+                <DataGridTextColumn 
+            Width="100"
+            Header="Стоимость"
+            Binding="{Binding Cost}"/>
+                <DataGridTextColumn 
+            Width="150"
+            Header="Стоимость cо скидкой"
+            Binding="{Binding CostWithDiscount}"/>
+                <DataGridTextColumn 
+            Width="150"
+            Header="Продолжительность"
+            Binding="{Binding DurationInSeconds}"/>
+                
+                <DataGridTemplateColumn 
+            Width="64"
+            Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- для отображения изображения использую геттер, который определен в МОДЕЛИ Service -->
+                            <Image 
+                        Height="64" 
+                        Width="64" 
+                        Source="{Binding ImageUri}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTextColumn 
+            Width="60"
+            Header="Скидка"
+            Binding="{Binding Discount}"/>
+            </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
@@ -43,39 +83,6 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <!-- колонкам я задаю фиксированную ширину, чтобы они не ёрзали при прокрутке -->
-                <DataGridTextColumn
-            Width="250"
-            Header="Наименование услуги"
-            Binding="{Binding Title}"/>
-                <DataGridTextColumn 
-            Width="100"
-            Header="Стоимость"
-            Binding="{Binding Cost}"/>
-                <DataGridTextColumn 
-            Width="150"
-            Header="Продолжительность"
-            Binding="{Binding DurationInSeconds}"/>
-                <DataGridTemplateColumn 
-            Width="100"
-            Header="Cтоимость">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <!-- для отображения изображения использую геттер, который определен в МОДЕЛИ Service -->
-                           <TextBlock 
-                TextDecorations="{Binding CostTextDecoration}"
-                Text="{Binding CostString}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                
-                       
-                <DataGridTextColumn 
-            Width="60"
-            Header="Скидка"
-            Binding="{Binding Discount}"/>
-            </DataGrid.Columns>
         </DataGrid>
 
     </Grid>

@@ -56,7 +56,7 @@ namespace AutoMih
             {
                 // Convert.ToDecimal - преобразует double в decimal
                 // Discount ?? 0 - разнуливает "Nullable" переменную
-                return (Cost * Convert.ToDecimal(1 - Discount ?? 0)).ToString("#.##");
+                return (Cost + Convert.ToDecimal(1 - Discount ?? 0)).ToString("#.##");
             }
         }
 
