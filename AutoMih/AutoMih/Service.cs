@@ -49,14 +49,14 @@ namespace AutoMih
                 return Cost.ToString("#.##");
             }
         }
-
+       
         public string CostWithDiscount
         {
             get
             {
                 // Convert.ToDecimal - преобразует double в decimal
                 // Discount ?? 0 - разнуливает "Nullable" переменную
-                return (Cost + Convert.ToDecimal(1 - Discount ?? 0)).ToString("#.##");
+                return (Cost * Convert.ToDecimal(1 - Discount ?? 0)).ToString("#.##");
             }
         }
 
@@ -74,7 +74,7 @@ namespace AutoMih
         {
             get
             {
-                return HasDiscount ? "None" : "Strikethrough";
+                return HasDiscount ? "Strikethrough" : "None";
             }
         }
     }

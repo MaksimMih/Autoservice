@@ -30,6 +30,19 @@
         ItemsSource="{Binding ServiceList}"
           CanUserAddRows="false"
           AutoGenerateColumns="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger 
+                Binding="{Binding HasDiscount}" 
+                Value="True">
+                            <Setter 
+                    Property="Background" 
+                    Value="LightGreen"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             
             <DataGrid.Columns>
                 <!-- колонкам я задаю фиксированную ширину, чтобы они не ёрзали при прокрутке -->
@@ -37,10 +50,20 @@
             Width="250"
             Header="Наименование услуги"
             Binding="{Binding Title}"/>
-                <DataGridTextColumn 
-            Width="100"
-            Header="Стоимость"
-            Binding="{Binding Cost}"/>
+                <DataGridTemplateColumn 
+                 Width="100"
+                Header="Стоимость">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- TextBlock поддерживает перечеркивание -->
+                            <TextBlock 
+                TextDecorations="{Binding CostTextDecoration}"
+                Text="{Binding CostString}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn 
             Width="150"
             Header="Стоимость cо скидкой"
@@ -70,19 +93,7 @@
             Header="Скидка"
             Binding="{Binding Discount}"/>
             </DataGrid.Columns>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Style.Triggers>
-                        <DataTrigger 
-                Binding="{Binding HasDiscount}" 
-                Value="True">
-                            <Setter 
-                    Property="Background" 
-                    Value="LightGreen"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
+            
         </DataGrid>
 
     </Grid>
