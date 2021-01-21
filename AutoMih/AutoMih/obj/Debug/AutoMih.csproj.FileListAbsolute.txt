@@ -21,3 +21,5 @@ C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\AutoMih.csproj.CoreCompileI
 C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\AutoMih.csproj.CopyComplete
 C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\AutoMih.exe
 C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\AutoMih.pdb
+C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\windows\InputBoxWindow.g.cs
+C:\Users\User\source\repos\AutoMih\AutoMih\obj\Debug\windows\InputBoxWindow.baml
