@@ -6,6 +6,7 @@
     <Application.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#ff9c1a"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
              
     </Application.Resources>

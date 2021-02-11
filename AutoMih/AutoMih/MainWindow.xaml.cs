@@ -35,7 +35,21 @@ namespace AutoMih
         private List<Service> _ServiceList;
         public List<Service> ServiceList
         {
-            get { return _ServiceList; }
+            get
+            {
+                var FilteredServiceList = _ServiceList.FindAll(item =>
+                item.DiscountFloat >= CurrentDiscountFilter.Item1 &&
+                item.DiscountFloat < CurrentDiscountFilter.Item2);
+                if (SearchFilter != "")
+                    FilteredServiceList = FilteredServiceList.Where(item =>
+                        item.Title.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1 ||
+                        item.DescriptionString.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+
+                if (SortPriceAscending)
+                    return FilteredServiceList.OrderBy(item => Double.Parse(item.CostWithDiscount)).ToList();
+                else
+                    return FilteredServiceList.OrderByDescending(item => Double.Parse(item.CostWithDiscount)).ToList();
+            }
             set { _ServiceList = value; }
         }
         private Boolean _IsAdminMode = false;
@@ -91,6 +105,89 @@ namespace AutoMih
                 return "Collapsed";
             }
         }
+        private Boolean _SortPriceAscending = true;
+        public Boolean SortPriceAscending
+        {
+            get { return _SortPriceAscending; }
+            set
+            {
+                _SortPriceAscending = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                }
+            }
+        }
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            SortPriceAscending = (sender as RadioButton).Tag.ToString() == "1";
+        }
+        public List<string> FilterByDiscountNamesList
+        {
+            get
+            {
+                return FilterByDiscountValuesList
+                    .Select(item => item.Item1)
+                    .ToList();
+            }
 
+        }
+        private List<Tuple<string, double, double>> FilterByDiscountValuesList =
+            new List<Tuple<string, double, double>>()
+            {
+                Tuple.Create("Все записи", 0d, 1d),
+                Tuple.Create("от 0% до 5%", 0d, 0.05d),
+                Tuple.Create("от 5% до 15%", 0.05d, 0.15d),
+                Tuple.Create("от 15% до 30%", 0.15d, 0.3d),
+                Tuple.Create("от 30% до 70%", 0.3d, 0.7d),
+                Tuple.Create("от 70% до 100%", 0.7d, 1d)
+            };
+        private Tuple<double, double> _CurrentDiscountFilter = Tuple.Create(double.MinValue, double.MaxValue);
+
+        public Tuple<double, double> CurrentDiscountFilter
+        {
+            get
+            {
+                return _CurrentDiscountFilter;
+            }
+            set
+            {
+                _CurrentDiscountFilter = value;
+                if (PropertyChanged != null)
+                {
+                    // при изменении фильтра список перерисовывается
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                }
+            }
+        }
+
+        private string  _SearchFilter="";
+        public string SearchFilter { 
+            get { return _SearchFilter; }
+            set
+            {
+                _SearchFilter = value;
+                if (PropertyChanged != null)
+                {
+                    // при изменении фильтра список перерисовывается
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                }
+            }
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            SearchFilter = SearchFilterTextBox.Text;
+        }
+
+        private void DiscountFilterComboBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            if (DiscountFilterComboBox.SelectedIndex >= 0)
+                CurrentDiscountFilter = Tuple.Create(
+                    FilterByDiscountValuesList[DiscountFilterComboBox.SelectedIndex].Item2,
+                    FilterByDiscountValuesList[DiscountFilterComboBox.SelectedIndex].Item3
+
+                );
+        }
     }
 }

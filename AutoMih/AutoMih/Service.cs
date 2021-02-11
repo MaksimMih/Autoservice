@@ -77,6 +77,20 @@ namespace AutoMih
                 return HasDiscount ? "Strikethrough" : "None";
             }
         }
+        public double DiscountFloat
+        {
+            get
+            {
+                return Convert.ToSingle(Discount ?? 0);
+            }
+        }
+        public string DescriptionString
+        {
+            get
+            {
+                return Description ?? "";
+            }
+        }
     }
     }
 
