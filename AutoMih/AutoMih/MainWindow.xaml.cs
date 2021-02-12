@@ -33,24 +33,31 @@ namespace AutoMih
             Application.Current.Shutdown();
         }
         private List<Service> _ServiceList;
+
+        
         public List<Service> ServiceList
         {
             get
             {
+              
                 var FilteredServiceList = _ServiceList.FindAll(item =>
                 item.DiscountFloat >= CurrentDiscountFilter.Item1 &&
                 item.DiscountFloat < CurrentDiscountFilter.Item2);
+               
                 if (SearchFilter != "")
                     FilteredServiceList = FilteredServiceList.Where(item =>
                         item.Title.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1 ||
                         item.DescriptionString.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1).ToList();
 
+
                 if (SortPriceAscending)
                     return FilteredServiceList.OrderBy(item => Double.Parse(item.CostWithDiscount)).ToList();
+                
                 else
                     return FilteredServiceList.OrderByDescending(item => Double.Parse(item.CostWithDiscount)).ToList();
             }
-            set { _ServiceList = value; }
+            set { _ServiceList = value;
+            }
         }
         private Boolean _IsAdminMode = false;
 
@@ -108,13 +115,17 @@ namespace AutoMih
         private Boolean _SortPriceAscending = true;
         public Boolean SortPriceAscending
         {
-            get { return _SortPriceAscending; }
+            get { return _SortPriceAscending;
+            }
             set
             {
                 _SortPriceAscending = value;
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServicesCount"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("FilteredServicesCount"));
+
                 }
             }
         }
@@ -157,6 +168,8 @@ namespace AutoMih
                 {
                     // при изменении фильтра список перерисовывается
                     PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServicesCount"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("FilteredServicesCount"));
                 }
             }
         }
@@ -171,6 +184,8 @@ namespace AutoMih
                 {
                     // при изменении фильтра список перерисовывается
                     PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServicesCount"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("FilteredServicesCount"));
                 }
             }
         }
@@ -188,6 +203,39 @@ namespace AutoMih
                     FilterByDiscountValuesList[DiscountFilterComboBox.SelectedIndex].Item3
 
                 );
+        }
+        public int ServicesCount {
+            get{
+                return _ServiceList.Count;
+            }
+        
+        }
+        public int FilteredServicesCount { 
+            get {
+                return ServiceList.Count;
+            } }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = MainDataGrid.SelectedItem as Service;
+
+            // по условиям задачи нельзя удалять только те услуги, которые уже оказаны
+            // свойство ClientService ссылается на таблицу оказанных услуг
+            if (item.ClientService.Count > 0)
+            {
+                MessageBox.Show("Нельзя удалять услугу, она уже оказана");
+                return;
+            }
+
+            // метод Remove нужно завернуть в конструкцию try..catch, на случай, если 
+            // база спроектирована криво и нет каскадного удаления - это сделайте сами
+            Core.DB.Service.Remove(item);
+
+            // сохраняем изменения
+            Core.DB.SaveChanges();
+
+            // перечитываем изменившийся список, не забывая в сеттере вызвать PropertyChanged
+            ServiceList = Core.DB.Service.ToList();
         }
     }
 }
