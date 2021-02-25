@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Git\Autoservice\AutoMih\AutoMih\App.xaml
-3-973684700
+42133937571
 2-1881755278
-23-1441804974
+23-408176945
 18-1910046978
-MainWindow.xaml;windows\InputBoxWindow.xaml;windows\ServiceWindow.xaml;
+MainWindow.xaml;windows\ClientServiceWindow.xaml;windows\InputBoxWindow.xaml;windows\ServiceWindow.xaml;
 
-True
+False
 

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\User\Desktop\AutoMih\AutoMih\obj\Debug\
+C:\Git\Autoservice\AutoMih\AutoMih\obj\Debug\
 AutoMih
 none
 false
 DEBUG;TRACE
-C:\Users\User\Desktop\AutoMih\AutoMih\App.xaml
-3-973684700
+C:\Git\Autoservice\AutoMih\AutoMih\App.xaml
+42133937571
 2-1881755278
-23-1441804974
-18615574392
-MainWindow.xaml;windows\InputBoxWindow.xaml;windows\ServiceWindow.xaml;
+24-1250536312
+18-1910046978
+MainWindow.xaml;windows\ClientServiceWindow.xaml;windows\InputBoxWindow.xaml;windows\ServiceWindow.xaml;
 
 True
 

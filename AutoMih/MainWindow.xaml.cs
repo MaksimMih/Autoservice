@@ -47,16 +47,16 @@ namespace AutoMih
         }
         private List<Service> _ServiceList;
 
-        
+
         public List<Service> ServiceList
         {
             get
             {
-              
+
                 var FilteredServiceList = _ServiceList.FindAll(item =>
                 item.DiscountFloat >= CurrentDiscountFilter.Item1 &&
                 item.DiscountFloat < CurrentDiscountFilter.Item2);
-               
+
                 if (SearchFilter != "")
                     FilteredServiceList = FilteredServiceList.Where(item =>
                         item.Title.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1 ||
@@ -65,7 +65,7 @@ namespace AutoMih
 
                 if (SortPriceAscending)
                     return FilteredServiceList.OrderBy(item => Double.Parse(item.CostWithDiscount)).ToList();
-                
+
                 else
                     return FilteredServiceList.OrderByDescending(item => Double.Parse(item.CostWithDiscount)).ToList();
             }
@@ -187,8 +187,8 @@ namespace AutoMih
             }
         }
 
-        private string  _SearchFilter="";
-        public string SearchFilter { 
+        private string _SearchFilter = "";
+        public string SearchFilter {
             get { return _SearchFilter; }
             set
             {
@@ -218,12 +218,12 @@ namespace AutoMih
                 );
         }
         public int ServicesCount {
-            get{
+            get {
                 return _ServiceList.Count;
             }
-        
+
         }
-        public int FilteredServicesCount { 
+        public int FilteredServicesCount {
             get {
                 return ServiceList.Count;
             } }
@@ -275,5 +275,14 @@ namespace AutoMih
                 PropertyChanged(this, new PropertyChangedEventArgs("ProductsCount"));
             }
         }
+
+        private void SubscrideButton_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedService = MainDataGrid.SelectedItem as Service;
+            var SubscrideServiceWindow = new windows.ClientServiceWindow(SelectedService);
+            SubscrideServiceWindow.ShowDialog();
+
+        }
     }
-}
+ }
+
