@@ -159,6 +159,7 @@ namespace AutoMih
         private List<Tuple<string, double, double>> FilterByDiscountValuesList =
             new List<Tuple<string, double, double>>()
             {
+               
                 Tuple.Create("Все записи", 0d, 1d),
                 Tuple.Create("от 0% до 5%", 0d, 0.05d),
                 Tuple.Create("от 5% до 15%", 0.05d, 0.15d),

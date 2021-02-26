@@ -15,7 +15,18 @@ using System.Windows.Shapes;
 
 
 namespace AutoMih
+{ 
+    public partial class Client
 {
+    public string FullName
+    {
+        get
+        {
+            return FirstName + ' ' + LastName;
+        }
+    }
+}
+
     public partial class ClientService {
         public string StartTimeText
         {
@@ -63,43 +74,56 @@ namespace AutoMih
 
     namespace AutoMih.windows
     {
-        /// <summary>
-        /// Логика взаимодействия для ClientService.xaml
-        /// </summary>
+    /// <summary>
+    /// Логика взаимодействия для ClientService.xaml
+    /// </summary>
 
 
-        public partial class ClientServiceWindow : Window
+    public partial class ClientServiceWindow : Window
+    {
+
+        public List<Client> ClientList { get; set; }
+        public ClientService CurrentClientService { get; set; }
+
+
+        public ClientServiceWindow(Service selected)
         {
+            InitializeComponent();
+            DataContext = this;
 
-            public List<Client> ClientList { get; set; }
-            public ClientService CurrentClientService { get; set; }
+            // список услуг можно передать в параметрах окна, чтобы не плодить сущностей
 
 
-            public ClientServiceWindow(Service selected)
+            // список клиентов 
+            ClientList = Core.DB.Client.ToList();
+
+            // у нас нет задачи редактировать записи на услуги, поэтому 
+            // в окне всегда создаем новую услугу
+            CurrentClientService = new ClientService();
+            CurrentClientService.Service = selected;
+
+            // время записи устанавливаем текущее, чтобы меньше было править
+            CurrentClientService.StartTime = DateTime.Now;
+        }
+
+        public string Family;
+        public string Imya;
+        public string Otchesstvo;
+
+        private List<Tuple<string, string, string>> FullNmae =
+            new List<Tuple<string, string, string>>()
             {
-                InitializeComponent();
-                DataContext = this;
 
-                // список услуг можно передать в параметрах окна, чтобы не плодить сущностей
+            };
 
 
-                // список клиентов 
-                ClientList = Core.DB.Client.ToList();
-
-                // у нас нет задачи редактировать записи на услуги, поэтому 
-                // в окне всегда создаем новую услугу
-                CurrentClientService = new ClientService();
-                CurrentClientService.Service = selected;
-
-                // время записи устанавливаем текущее, чтобы меньше было править
-                CurrentClientService.StartTime = DateTime.Now;
-            }
         public string FullName(Client client)
         {
-            get
-            {
-
-            }
+                Family = client.FirstName;
+                Imya = client.LastName;
+                Otchesstvo = client.Patronymic;
+                //return "0";
+                return Family + Imya + Otchesstvo;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
