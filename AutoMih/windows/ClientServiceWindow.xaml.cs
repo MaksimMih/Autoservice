@@ -106,25 +106,7 @@ namespace AutoMih
             CurrentClientService.StartTime = DateTime.Now;
         }
 
-        public string Family;
-        public string Imya;
-        public string Otchesstvo;
-
-        private List<Tuple<string, string, string>> FullNmae =
-            new List<Tuple<string, string, string>>()
-            {
-
-            };
-
-
-        public string FullName(Client client)
-        {
-                Family = client.FirstName;
-                Imya = client.LastName;
-                Otchesstvo = client.Patronymic;
-                //return "0";
-                return Family + Imya + Otchesstvo;
-        }
+       
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
