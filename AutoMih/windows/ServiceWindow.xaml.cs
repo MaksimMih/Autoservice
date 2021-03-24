@@ -36,27 +36,7 @@ namespace AutoMih.windows
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void GetImageButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog GetImageDialog = new OpenFileDialog();
-            // задаем фильтр для выбираемых файлов
-            // до символа "|" идет произвольный текст, а после него шаблоны файлов раздеренные точкой с запятой
-            GetImageDialog.Filter = "Файлы изображений: (*.png, *.jpg)|*.png;*.jpg";
-            // чтобы не искать по всему диску задаем начальный каталог
-            GetImageDialog.InitialDirectory = Environment.CurrentDirectory;
-            if (GetImageDialog.ShowDialog() == true)
-            {
-                // перед присвоением пути к картинке обрезаем начало строки, т.к. диалог возвращает полный путь
-                // (тут конечно еще надо проверить есть ли в начале Environment.CurrentDirectory)
-                CurrentService.MainImagePath = GetImageDialog.FileName.Substring(Environment.CurrentDirectory.Length + 1);
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("CurrentService"));
-                }
-            }
-        }
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentService.Cost <= 0)
@@ -85,15 +65,39 @@ namespace AutoMih.windows
             }
             DialogResult = true;
         }
-        public  string NewProduct {
+        public string NewProduct
+        {
             get
             {
-                if (CurrentService.ID == 0) return "collapsed"; 
+                if (CurrentService.ID == 0) return "collapsed";
                 return "visible";
-                
-                
-                
+
+
+
             }
-    }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void GetImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog GetImageDialog = new OpenFileDialog();
+            // задаем фильтр для выбираемых файлов
+            // до символа "|" идет произвольный текст, а после него шаблоны файлов раздеренные точкой с запятой
+            GetImageDialog.Filter = "Файлы изображений: (*.png, *.jpg)|*.png;*.jpg";
+            // чтобы не искать по всему диску задаем начальный каталог
+            GetImageDialog.InitialDirectory = Environment.CurrentDirectory;
+            if (GetImageDialog.ShowDialog() == true)
+            {
+                // перед присвоением пути к картинке обрезаем начало строки, т.к. диалог возвращает полный путь
+                // (тут конечно еще надо проверить есть ли в начале Environment.CurrentDirectory)
+                CurrentService.MainImagePath = GetImageDialog.FileName.Substring(Environment.CurrentDirectory.Length + 1);
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("CurrentService"));
+                }
+            }
+        }
+        
     }
 }

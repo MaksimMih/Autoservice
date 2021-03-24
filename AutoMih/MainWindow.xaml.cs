@@ -70,6 +70,10 @@ namespace AutoMih
                     return FilteredServiceList.OrderByDescending(item => Double.Parse(item.CostWithDiscount)).ToList();
             }
             set { _ServiceList = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                }
             }
         }
         private Boolean _IsAdminMode = false;
@@ -240,7 +244,7 @@ namespace AutoMih
                 MessageBox.Show("Нельзя удалять услугу, она уже оказана");
                 return;
             }
-
+           
             // метод Remove нужно завернуть в конструкцию try..catch, на случай, если 
             // база спроектирована криво и нет каскадного удаления - это сделайте сами
             Core.DB.Service.Remove(item);
@@ -250,6 +254,8 @@ namespace AutoMih
 
             // перечитываем изменившийся список, не забывая в сеттере вызвать PropertyChanged
             ServiceList = Core.DB.Service.ToList();
+            PropertyChanged(this, new PropertyChangedEventArgs("FilteredServicesCount"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ServicesCount"));
         }
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
