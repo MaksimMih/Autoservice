@@ -17,6 +17,21 @@ using AutoMih.windows;
 
 namespace AutoMih
 {
+    public partial class Service
+{
+    public Uri ImageUri
+    {
+        get
+        {
+            return new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, MainImagePath ?? ""));
+        }
+    }
+}
+
+    public class Globals
+    {
+       public static NearestEntries NearestEntries_Open = null;
+    }
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
@@ -28,22 +43,23 @@ namespace AutoMih
             this.DataContext = this;
             ServiceList = Core.DB.Service.ToList();
         }
+
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
         private List<Service> _ServiceList;
 
-        
+
         public List<Service> ServiceList
         {
             get
             {
-              
+
                 var FilteredServiceList = _ServiceList.FindAll(item =>
                 item.DiscountFloat >= CurrentDiscountFilter.Item1 &&
                 item.DiscountFloat < CurrentDiscountFilter.Item2);
-               
+
                 if (SearchFilter != "")
                     FilteredServiceList = FilteredServiceList.Where(item =>
                         item.Title.IndexOf(SearchFilter, StringComparison.OrdinalIgnoreCase) != -1 ||
@@ -52,11 +68,15 @@ namespace AutoMih
 
                 if (SortPriceAscending)
                     return FilteredServiceList.OrderBy(item => Double.Parse(item.CostWithDiscount)).ToList();
-                
+
                 else
                     return FilteredServiceList.OrderByDescending(item => Double.Parse(item.CostWithDiscount)).ToList();
             }
             set { _ServiceList = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                }
             }
         }
         private Boolean _IsAdminMode = false;
@@ -146,6 +166,7 @@ namespace AutoMih
         private List<Tuple<string, double, double>> FilterByDiscountValuesList =
             new List<Tuple<string, double, double>>()
             {
+               
                 Tuple.Create("Все записи", 0d, 1d),
                 Tuple.Create("от 0% до 5%", 0d, 0.05d),
                 Tuple.Create("от 5% до 15%", 0.05d, 0.15d),
@@ -174,8 +195,8 @@ namespace AutoMih
             }
         }
 
-        private string  _SearchFilter="";
-        public string SearchFilter { 
+        private string _SearchFilter = "";
+        public string SearchFilter {
             get { return _SearchFilter; }
             set
             {
@@ -205,12 +226,12 @@ namespace AutoMih
                 );
         }
         public int ServicesCount {
-            get{
+            get {
                 return _ServiceList.Count;
             }
-        
+
         }
-        public int FilteredServicesCount { 
+        public int FilteredServicesCount {
             get {
                 return ServiceList.Count;
             } }
@@ -237,5 +258,54 @@ namespace AutoMih
             // перечитываем изменившийся список, не забывая в сеттере вызвать PropertyChanged
             ServiceList = Core.DB.Service.ToList();
         }
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedService = MainDataGrid.SelectedItem as Service;
+            var EditServiceWindow = new windows.ServiceWindow(SelectedService);
+            if ((bool)EditServiceWindow.ShowDialog())
+            {
+                // при успешном завершении не забываем перерисовать список услуг
+                PropertyChanged(this, new PropertyChangedEventArgs("ServiceList"));
+                // и еще счетчики - их добавьте сами
+            }
+        }
+        private void AddService_Click(object sender, RoutedEventArgs e)
+        {
+            // создаем новую услугу
+            var NewService = new Service();
+
+            var NewServiceWindow = new windows.ServiceWindow(NewService);
+            if ((bool)NewServiceWindow.ShowDialog())
+            {
+                // список услуг нужно перечитать с сервера
+                ServiceList = Core.DB.Service.ToList();
+                PropertyChanged(this, new PropertyChangedEventArgs("FilteredProductsCount"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ProductsCount"));
+            }
+        }
+
+        private void SubscrideButton_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedService = MainDataGrid.SelectedItem as Service;
+            var SubscrideServiceWindow = new windows.ClientServiceWindow(SelectedService);
+            SubscrideServiceWindow.ShowDialog();
+
+        }
+        
+
+        private void NearestButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Globals.NearestEntries_Open==null)
+            {        
+                Globals.NearestEntries_Open = new windows.NearestEntries();
+                Globals.NearestEntries_Open.Show();
+            }
+            else
+            {
+                Globals.NearestEntries_Open.Activate();
+            }
+           
+        }
     }
-}
+ }
+

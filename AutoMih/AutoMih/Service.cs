@@ -34,13 +34,7 @@ namespace AutoMih
         public virtual ICollection<ClientService> ClientService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServicePhoto> ServicePhoto { get; set; }
-        public Uri ImageUri
-        {
-            get
-            {
-                return new Uri(Path.Combine(Environment.CurrentDirectory, MainImagePath));
-            }
-        }
+        
             public string CostString
         {
             get

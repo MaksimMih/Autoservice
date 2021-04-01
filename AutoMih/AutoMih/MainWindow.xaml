@@ -19,6 +19,12 @@
             VerticalAlignment="Bottom">
             <Button
                 Content="Добавить услугу"
+                Click="AddService_Click"
+                Visibility="{Binding AdminVisibility}"
+            />
+            <Button
+                Content="Посмотреть Ближайшие записи"
+                Click="NearestButton_Click"
                 Visibility="{Binding AdminVisibility}"
             />
 
@@ -119,6 +125,7 @@
                         Binding="{Binding Discount}"/>
                     
                     <DataGridTemplateColumn
+                        
                         Header="Действия">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -127,7 +134,13 @@
                                     Orientation="Horizontal">
                                     <Button 
                                         Content="Редактировать" 
-                                        Name="EditButton"/>
+                                        Name="EditButton"
+                                        Click="EditButton_Click"/>
+                                    <Button 
+                                        Content="Записаться" 
+                                        Name="SubscrideButton"
+                                        
+                                        Click="SubscrideButton_Click"/>
                                     <Button 
                                         Content="Удалить" 
                                         Name="DeleteButton"
